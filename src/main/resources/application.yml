@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: assignment-service
+          uri: http://assignment-service:8081
+          predicates:
+            - Path=/api/v1/assignments/**,/api/v1/docker-images/**
+          filters:
+            - name: JwtHeaderFilter
+
+        - id: submission-service
+          uri: http://submission-service:8082
+          predicates:
+            - Path=/api/v1/submissions/**
+          filters:
+            - name: JwtHeaderFilter
+
+        - id: result-service
+          uri: http://result-service:8084
+          predicates:
+            - Path=/api/v1/results/**
+          filters:
+            - name: JwtHeaderFilter
+
+        - id: notification-service
+          uri: http://notification-service:8085
+          predicates:
+            - Path=/api/v1/notifications/**
+          filters:
+            - name: JwtHeaderFilter
+
+        - id: notification-service-ws
+          uri: ws://notification-service:8085
+          predicates:
+            - Path=/ws/**
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8088/realms/grading-platform
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
