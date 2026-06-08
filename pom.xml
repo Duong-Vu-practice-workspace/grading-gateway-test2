@@ -22,12 +22,6 @@
         <spring-cloud.version>2024.0.5</spring-cloud.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/Duong-Vu-practice-workspace/grading-common-lib-test2</url>
-        </repository>
-    </repositories>
 
     <dependencyManagement>
         <dependencies>
